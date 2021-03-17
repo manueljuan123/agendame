@@ -19,12 +19,12 @@
 {% endwith %}
 
     <div class="card-body">
-        <form action="{{url_for('login')}}" method='POST'>
+        <form action="{{url_for('index')}}" method='POST'>
             <div class="form-group">
                 <input type="text" name="email" placeholder="E-MAIL">
             </div>
             <div class="form-group">
-                <input type="text" name="contraseña" placeholder="Contraseña">
+                <input type="password" name="contraseña" placeholder="Contraseña">
             </div>
             <button type="submit" class="btn btn-success">
                 INGRESAR
