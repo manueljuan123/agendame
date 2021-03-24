@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request, redirect, flash, url_for
+from flask import Flask, render_template, request, redirect, flash, url_for, session
 from flask_mysqldb import MySQL
 import os
+import re
+import MySQLdb.cursors
 
 app = Flask(__name__)
 
@@ -15,28 +17,29 @@ app.secret_key = 'mysecretkey'
 
 @app.route('/')
 def index():
-    cur=mysql.connection.cursor()
-    cur.execute('SELECT * FROM usuario')
-    data = cur.fetchall()
-    cur.close()
-    return render_template('index.html', usuarios = data) 
+    return render_template('index.html')
 
 
+@app.route('/login', methods=["POST","GET"])
+def login():
+    msg = ''
+    if request.method == 'POST' and 'email' in request.form and 'contrasena' in request.form:
+        idUsuario = request.form['email']
+        idContrasena = request.form['contrasena']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM usuario WHERE email= %s AND contrasena= %s',(idUsuario,idContrasena))
+        cuenta = cursor.fetchone()
 
-@app.route('/login', methods=["POST"])
-def login(cxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx):
-    email=request.form['email']
-    contrasena=request.form['contrasena']
+        if cuenta:
+            session['loggedin'] = True
+            session['email'] = cuenta['email']
+            session['contrasena'] = cuenta['contrasena']
+            msg = "Logged in successfully!"
+            return render_template('eventos.html', msg = msg)
+        else:
+            msg = "Incorrect username/password"
+            return render_template('index.html', msg = msg)
 
-    try:
-        cur=mysql.connection.cursor()
-        cur.execute(f'SELECT * FROM usuario WHERE email = {email}')
-        data = cur.fetchall()
-        cur.close()
-        return render_template('eventos.html', email = data[0])
-    except:
-        flash ("El usuario o la contraseña no son correctos. Revise o regístrese en la parte inferior, por favor")
-        return render_template('index.html')
         
 
 
