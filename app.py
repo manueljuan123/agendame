@@ -40,9 +40,19 @@ def login():
             msg = "Incorrect username/password"
             return render_template('index.html', msg = msg)
 
-        
-
-
+@app.route('/registro',methods=["POST","GET"])       
+def registro():
+       if request.method == 'POST':
+            nombreUs =request.form['nombreUsuario']
+            apellidoUs =request.form['apellidoUsuario']
+            edadUs =request.form['edadUsuario']
+            ocupacionUs =request.form["ocupacion"]
+            emailUs =request.form["email"]
+            contrasena =request.form["contrasena"]
+            cur=mysql.connection.cursor() 
+            cur.execute('INSERT INTO usuario (nombreUsuario,apellidoUsuario,edadUsuario,ocupacion,email,contrasena) VALUES (%s,%s,%s,%s,%s,%s)',(nombreUs,apellidoUs,edadUs,ocupacionUs,email,contrasena)) 
+            mysql.connection.commit() 
+            return redirect(url_for('index'))
 if __name__== "__main__":
     app.run(debug=True)
 

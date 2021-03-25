@@ -2,41 +2,40 @@
 {% block body %}
 
 <div class="row">
-    <div class="col-md-3">
-        {% with messages = get_flashed_messages() %}
+    <div class="col-md-3">_:
         {% if messages %}
         {% for message in messages %}
 
-<div class="alert alert-info alert dismissible fade show" role="alert">
-    {{message}}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-
-{% endfor %}
-{% endif %}
-{% endwith %}
-
-    <div class="card-body">
-            <form action="{{ url_for('login') }}" method="POST">
-            <div class="msg">{{ msg }}</div>
-            <div class="form-group">
-                <input type="text" name="email" placeholder="E-MAIL">
-            </div>
-            <div class="form-group">
-                <input type="password" name="contrasena" placeholder="Contraseña">
-            </div>
-            <button type="submit" class="btn btn-success">
-                INGRESAR
+        <div class="alert alert-info alert dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
             </button>
-            </form>
+        </div>
 
-            <button type="submit" class="btn btn-info">
-                REGISTRARSE
-            </button>
+        {% endfor %}
+        {% endif %}
         
-    </div>
+
+        <div class="card-body">
+            <form action="{{ url_for('login') }}" method="POST">
+                <div class="msg">{{ msg }}</div>
+                <div class="form-group">
+                    <input type="text" name="email" placeholder="E-MAIL">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="contrasena" placeholder="Contraseña">
+                </div>
+                <button type="submit" class="btn btn-success">
+                    INGRESAR
+                </button>
+            </form> <br>
+            <form action="{{url_for('registro')}}">
+                <button type="submit" class="btn btn-info">
+                    REGISTRARSE
+                </button>
+            </form>
+        </div>
 
 
 
