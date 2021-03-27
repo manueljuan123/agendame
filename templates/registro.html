@@ -1,39 +1,58 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<div class="row">
+    <div class="col-md-3">
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+    {{message}}    
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+
+{% endfor %}
+{% endif %}
+{% endwith %}
+
 <div class="container">
-    <form action="/registro" method="POST">
+    <form action="{{ url_for('registro') }}" method='POST'>
         <div class="row">
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">nombreUsuario</span>
-                <input type="text" class="form-control"  aria-label="nombreUsuario"
-                    aria-describedby="basic-addon1">
+            <div class="form-group mb-3">
+                <span class="input-group-text" >NOMBRE</span>
+                <input type="text"  name="nombreUsuario" required>
             </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">apellidoUsuario</span>
-                <input type="text" class="form-control" aria-label="apellidoUsuario"
-                    aria-describedby="basic-addon1">
+            <div class="form-group mb-3">
+                <span class="input-group-text" >APELLIDO</span>
+                <input type="text"  name="apellidoUsuario" required>
             </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">edadUsuario</span>
-                <input type="number" class="form-control" aria-label="edadUsuario"
-                    aria-describedby="basic-addon1">
+            <div class="form-group mb-3">
+                <span class="input-group-text" >EDAD</span>
+                <input type="number" name="edadUsuario" required>
             </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">ocupacion</span>
-                <input type="text" class="form-control" aria-label="ocupacion"
-                    aria-describedby="basic-addon1">
+            <div class="form-group mb-3">
+                <span class="input-group-text" >OCUPACIÓN</span>
+                <input type="text"  name="ocupacion" required>
             </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">email</span>
-                <input type="text" class="form-control"  aria-label="Email"
-                    aria-describedby="basic-addon1">
+            <div class="form-group mb-3">
+                <span class="input-group-text" >E-MAIL</span>
+                <input type="text"  name="email" required>
             </div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">contrasena</span>
-                <input type="password" class="form-control"  aria-label="contrasena"
-                    aria-describedby="basic-addon1">
+            <div class="form-group mb-3">
+                <span class="input-group-text">CONTRASEÑA</span>
+                <input type="password"  name="contrasena" required>
             </div>
             <div class="d-grid gap-2 col-6 mx-auto">
-                <button class="btn btn-info" type="button">Registrar</button>
+                <button class="btn btn-info" type="submit">REGISTRARSE</button>
             </div>
+
         </div>
     </form>
 </div>
+</div>
+</div>
+
+{% endblock %}

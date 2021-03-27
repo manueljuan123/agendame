@@ -20,9 +20,8 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/login', methods=["POST","GET"])
+@app.route('/eventos', methods=["POST","GET"])
 def login():
-    msg = ''
     if request.method == 'POST' and 'email' in request.form and 'contrasena' in request.form:
         idUsuario = request.form['email']
         idContrasena = request.form['contrasena']
@@ -34,25 +33,36 @@ def login():
             session['loggedin'] = True
             session['email'] = cuenta['email']
             session['contrasena'] = cuenta['contrasena']
-            msg = "Logged in successfully!"
-            return render_template('eventos.html', msg = msg)
-        else:
-            msg = "Incorrect username/password"
-            return render_template('index.html', msg = msg)
+            return render_template('eventos.html')
 
-@app.route('/registro',methods=["POST","GET"])       
+        else:
+            flash("Su usuario o contraseña no son correctos, vuelva a intentarlo o regístrese, por favor")
+            return render_template('index.html')
+
+
+@app.route('/registro', methods=["POST","GET"])       
 def registro():
-       if request.method == 'POST':
-            nombreUs =request.form['nombreUsuario']
-            apellidoUs =request.form['apellidoUsuario']
-            edadUs =request.form['edadUsuario']
-            ocupacionUs =request.form["ocupacion"]
-            emailUs =request.form["email"]
-            contrasena =request.form["contrasena"]
-            cur=mysql.connection.cursor() 
-            cur.execute('INSERT INTO usuario (nombreUsuario,apellidoUsuario,edadUsuario,ocupacion,email,contrasena) VALUES (%s,%s,%s,%s,%s,%s)',(nombreUs,apellidoUs,edadUs,ocupacionUs,email,contrasena)) 
-            mysql.connection.commit() 
-            return redirect(url_for('index'))
+    if request.method == 'POST':
+        nombreUsuario = request.form['nombreUsuario']
+        apellidoUsuario = request.form['apellidoUsuario']
+        edadUsuario = request.form['edadUsuario']
+        ocupacion = request.form["ocupacion"]
+        email = request.form["email"]
+        contrasena = request.form["contrasena"]
+        
+        cursor = mysql.connection.cursor()
+        cursor.execute('INSERT INTO usuario (nombreUsuario, apellidoUsuario, edadUsuario, ocupacion, email, contrasena) VALUES (%s,%s,%s,%s,%s,%s)',(nombreUsuario,apellidoUsuario,edadUsuario,ocupacion,email,contrasena)) 
+        mysql.connection.commit()
+        flash("Se ha registrado con éxito, gracias por elegirnos. Para confirmar, ingrese con los datos anteriormente digitados, por favor.")
+        return redirect(url_for('index'))
+
+    return render_template('/registro.html')
+
+
+
+
+
+
 if __name__== "__main__":
     app.run(debug=True)
 
