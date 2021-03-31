@@ -9,3 +9,15 @@
     border-radius: 15px;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.589);
 }
+.imag_reg{
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.589);
+}
+
+.formulario_reg{
+    background: rgba(0,0,0,.5);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 40px rgba(15, 58, 153, 0.623);
+}
+

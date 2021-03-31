@@ -1,7 +1,9 @@
 {% extends 'layout.html' %}
 {% block body %}
 
-<div class="row align-items-end justify-content-end">
+<div class="row">
+    <img src="https://st4.depositphotos.com/2890321/25133/i/1600/depositphotos_251332566-stock-photo-close-up-of-calendar-on.jpg" alt="" width="840px" height="500px" class="float-start imag_reg">
+
     <div class="col-md-3">
 
         {% with messages = get_flashed_messages() %}
@@ -17,36 +19,32 @@
 {% endfor %}
 {% endif %}
 {% endwith %}
-
-<div class="container">
+<div class="container align-items-end justify-content-end formulario_reg">
     <form action="{{ url_for('registro') }}" method='POST'>
-        <div class="row">
-            <div class="form-group mb-3">
-                <span class="input-group-text" >NOMBRE</span>
-                <input type="text"  name="nombreUsuario" required>
+        <div class="row  justify-content-center">
+            <div class="text-center">
+                <h3 class="text-light">Crea Tu Cuenta</h3>
             </div>
             <div class="form-group mb-3">
-                <span class="input-group-text" >APELLIDO</span>
-                <input type="text"  name="apellidoUsuario" required>
+                <input type="text"  name="nombreUsuario" placeholder="Nombres" class="form-control" required>
             </div>
             <div class="form-group mb-3">
-                <span class="input-group-text" >EDAD</span>
-                <input type="number" name="edadUsuario" required>
+                <input type="text"  name="apellidoUsuario"  placeholder="Apellidos" class="form-control" required>
             </div>
             <div class="form-group mb-3">
-                <span class="input-group-text" >OCUPACIÓN</span>
-                <input type="text"  name="ocupacion" required>
+                <input type="number" name="edadUsuario"  placeholder="Edad" class="form-control" required>
             </div>
             <div class="form-group mb-3">
-                <span class="input-group-text" >E-MAIL</span>
-                <input type="text"  name="email" required>
+                <input type="text"  name="ocupacion"  placeholder="Ocupación" class="form-control" required>
             </div>
             <div class="form-group mb-3">
-                <span class="input-group-text">CONTRASEÑA</span>
-                <input type="password"  name="contrasena" required>
+                <input type="text"  name="email"  placeholder="Email" class="form-control" required>
+            </div>
+            <div class="form-group mb-3">
+                <input type="password"  name="contrasena" placeholder="Contraseña" class="form-control" required>
             </div>
             <div class="d-grid gap-2 col-6 mx-auto">
-                <button class="btn btn-info" type="submit">REGISTRARSE</button>
+                <button class="btn btn-dark" type="submit">REGISTRARSE</button>
             </div>
 
         </div>
