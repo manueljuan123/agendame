@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block body %}
 <html>
-<div class="row">
+<div class="row ">
     <div class="col-md-3">
 
         {% with messages = get_flashed_messages() %}
@@ -18,15 +18,18 @@
 {% endif %}
 {% endwith %}
 
-        <div class="card-body">
+        <div class="card-body formulario_lo">
             <form action="{{ url_for('login') }}" method="POST">
+                <div class="text-center">
+                    <h1>Iniciar Sesión</h1>
+                </div>
                 <div class="form-group">
                     <input type="text" name="email" placeholder="E-MAIL">
                 </div>
                 <div class="form-group">
                     <input type="password" name="contrasena" placeholder="Contraseña">
                 </div>
-                <button type="submit" class="btn btn-success">
+                <button type="submit" class="btn btn-dark">
                     INGRESAR
                 </button>
             </form> <br>
@@ -36,6 +39,8 @@
         </div>
 
     </div>
+    <img src="https://image.freepik.com/foto-gratis/escritorio-madera-marron-taza-cafe-agenda-teclado-2-cortaunas-vista-superior-fondo-copyspace_37282-446.jpg" alt="" width="850px" height="500px" class="imag_lo">
+
 </div>
 </html>
 {% endblock %}

@@ -1,0 +1,11 @@
+.formulario_lo{
+    background: rgba(0,0,0,.1);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.568);
+}
+
+.imag_lo{
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.589);
+}
