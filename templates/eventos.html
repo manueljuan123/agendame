@@ -116,6 +116,36 @@
 
 </script>
 -->
+<!-- Modal Agregar, modificar y eliminar-->
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-outline-dark btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+  Agregar
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Agregar Evento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="descripcionEvento"></div>
+
+        Fecha: <input type="date" id="txtFecha" name="fecha" /><br/>
+        Título: <input type="text" id="txtTitulo" /><br/>
+        Hora: <input type="time" id="txtHora" value="10:30" /><br/>
+        Lugar: <input type="text" id="txtLugar"/><br/>
+        Descripción: <textarea type="text" id="txtDescripcion" rows="3" ></textarea><br/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="btnAgregar" action="insertEvent">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!--JS DataTable-->

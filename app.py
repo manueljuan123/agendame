@@ -72,7 +72,7 @@ def insertEvent(id):
         textcolor = request.form['textcolor']
 
         cursor = mysql.connection.cursor()
-        cursor.execute('INSERT INTO evento (title, descripcion, hora, fecha, fechaFinal, lugar, color, textcolor) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)',(title, descripcion, hora, fechaInicio, fechaFinal, lugar, color, textcolor))
+        cursor.execute('INSERT INTO eventos (title, descripcion, hora, fecha, fechaFinal, lugar, color, textcolor) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)',(title, descripcion, hora, fechaInicio, fechaFinal, lugar, color, textcolor))
         mysql.connection.commit()
         flash("Evento guardado con éxito")
         return redirect(url_for('eventos'))
