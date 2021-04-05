@@ -59,20 +59,18 @@ def registro():
     return render_template('/registro.html')
 
 
-@app.route('/idevento',methods=["POST","GET"])
+@app.route('/evento/<id>',methods=["POST","GET"])
 def insertEvent(id):
     if request.method == 'POST':
-        title = request.form['title']
+        titulo = request.form['title']
         descripcion = request.form['descripcion']
         hora = request.form['hora']
-        fechaInicio = request.form['fecha']
-        fechaFinal = request.form['fechaFinal']
+        fecha = request.form['fecha']
         lugar = request.form['lugar']
-        color = request.form['color']
-        textcolor = request.form['textcolor']
 
         cursor = mysql.connection.cursor()
-        cursor.execute('INSERT INTO eventos (title, descripcion, hora, fecha, fechaFinal, lugar, color, textcolor) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)',(title, descripcion, hora, fechaInicio, fechaFinal, lugar, color, textcolor))
+        cursor.execute(f'SELECT * FROM usuario WHERE id = {id}')
+        cursor.execute('INSERT INTO eventos (titulo, descripcion, hora, fecha, lugar) VALUES (%s,%s,%s,%s,%s)',(titulo, descripcion, hora, fecha, lugar))
         mysql.connection.commit()
         flash("Evento guardado con éxito")
         return redirect(url_for('eventos'))
