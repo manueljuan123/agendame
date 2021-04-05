@@ -3,7 +3,7 @@ use agendate;
 
 
 create table usuario (
-idUsuario INT PRIMARY KEY NOT NULL,
+idUsuario INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
 nombreUsuario VARCHAR (50) NOT NULL,
 apellidoUsuario VARCHAR(50) NOT NULL,
 edadUsuario INT NOT NULL,
@@ -12,7 +12,7 @@ email VARCHAR(60) NULL,
 contrasena VARCHAR(50)  NOT NULL);
 
 create table eventos(
-id INT(11) PRIMARY KEY NOT NULL,
+id INT(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
 descripcion VARCHAR(70) NOT NULL,
 hora TIME NOT NULL,
 fecha DATE NOT NULL,
