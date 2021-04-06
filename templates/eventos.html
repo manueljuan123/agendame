@@ -20,103 +20,14 @@
  
 </head>
 <body>
-<!--
-<div id="calendar" class="pt-3"></div>
 
-    <script>
-      $(document).ready(function(){
-        $('#calendar').fullCalendar({
-          header:{
-            left: 'today, prev, next, Miboton',
-            center: 'title',
-            right: 'month,basicWeek,basicDay'
-          },
-          customButtons:{
-            Miboton:{
-              text:"Botón 1",
-              click:function(){
-                alert("Acción de botón: ")
-              }
-            }
-          },
-          dayClick:function(date,jsEvent,view){
-            $('#txtFecha').val(date.format());
-  
-            $("#modalEventos").modal("show")
-
-          },
-          
-          events:'eventos.html',
-          
-          //La siguiente función permitirá que cuando el usuario seleccione algún evento, este se muestre con toda la información del mismo
-            eventClick:function(calEvent,jsEvent,view){
-
-              $("#modalEventos").modal("show");
-
-          }
-
-        });
-      });
-    </script>
-
-    
-    
-    <-- Modal Agregar, modificar y eliminar->
-
-<div class="modal fade" id="modalEventos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role='document'>
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="tituloEvento"></h5>
-          <button type="button" class="btn-close"  aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div id="descripcionEvento"></div>
-
-          Fecha: <input type="text" id="txtFecha" name="fecha" /><br/>
-          Título: <input type="text" id="txtTitulo" /><br/>
-          Hora: <input type="text" id="txtHora" value="10:30" /><br/>
-          Lugar: <input type="text" id="txtLugar"/><br/>
-          Descripción: <textarea type="text" id="txtDescripcion" rows="3" ></textarea><br/>
-          Color: <input type="color" id="txtColor" value="#ff0000" /><br/>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="btnAgregar" action="insertEvent" >Agregar</button>
-          <button type="button" class="btn btn-secondary" >Modificar</button>
-          <button type="button" class="btn btn-secondary" >Borrar</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-<script>
-
-  $('#btnAgregar').click(function(){
-
-    var NuevoEvento = {
-      title:$('#txtTitulo').val(),
-      start:$('#txtFecha').val()+" "+$('#txtHora').val(),
-      color:$('#txtColor').val(),
-      descripcion:$('#txtDescripcion').val(),
-      textColor:"#FFFFFF"
-    };
-    $('#calendar').fullCalendar('renderEvent',NuevoEvento);
-    $("#modalEventos").modal("toggle");
-    
-
-  });
-
-</script>
--->
-<!-- Modal Agregar, modificar y eliminar-->
+<!-- Modal Agregar-->
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-outline-dark btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
   Agregar
 </button>
+<!-- Button salir  -->
+<a href="/salir" class="btn btn-outline-danger float-end" role="button" aria-pressed="true">Salir</a>
 
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -183,7 +94,7 @@
               <td>{{eventos.2}}</td>
               <td>
                 <a href="" class="btn btn-light">Edit</a>
-                <a href="" class="btn btn-danger btn-delete">Delete</a>
+                <a  href="/delete/{{eventos.0}}" class="btn btn-danger btn-delete">Delete</a>
             </td>
         </tr>
       {% endfor %}  

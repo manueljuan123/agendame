@@ -84,9 +84,19 @@ def insertEvent(id):
 
             return render_template('index.html')
 
+@app.route("/salir")
+# Funcion para salir
+def salir():
+    session.clear()
+    return redirect(url_for('index'))
 
-
-
+@app.route('/delete/<string:id>')
+def delete_contact(id):
+    cur = mysql.connection.cursor()
+    cur.execute('DELETE FROM eventos WHERE id = {0}'.format(id))
+    mysql.connection.commit()
+    flash('Contact Removed Successfully')
+    return redirect(url_for('Index'))
 
 
 
