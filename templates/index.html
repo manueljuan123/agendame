@@ -42,5 +42,19 @@
     <img src="https://image.freepik.com/foto-gratis/escritorio-madera-marron-taza-cafe-agenda-teclado-2-cortaunas-vista-superior-fondo-copyspace_37282-446.jpg" alt="" width="850px" height="500px" class="imag_lo">
 
 </div>
+<tbody>
+    {% for contact in contacts %}
+    <tr>
+        <td>{{contact.0}}</td>
+        <td>{{contact.1}}</td>
+        <td>{{contact.2}}</td>
+        <td>{{contact.3}}</td>
+        <td>
+            <a href="/edit/{{contact.0}}" class="btn btn-info">Edit</a>
+            <a href="/delete/{{contact.0}}" class="btn btn-danger btn-delete">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
 </html>
 {% endblock %}

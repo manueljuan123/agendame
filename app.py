@@ -33,11 +33,17 @@ def login():
             session['loggedin'] = True
             session['email'] = cuenta['email']
             session['contrasena'] = cuenta['contrasena']
-            return render_template('eventos.html')
+
+            cur=mysql.connection.cursor()
+            cur.execute('SELECT * FROM eventos')
+            data = cur.fetchall()
+            cur.close()
+            return render_template('eventos.html', eventos = data)
 
         else:
             flash("Su usuario o contraseña no son correctos, vuelva a intentarlo o regístrese, por favor")
             return render_template('index.html')
+
 
 
 @app.route('/registro', methods=["POST","GET"])       
@@ -56,10 +62,10 @@ def registro():
         flash("Se ha registrado con éxito, gracias por elegirnos. Para confirmar, ingrese con los datos anteriormente digitados, por favor.")
         return redirect(url_for('index'))
 
-    return render_template('/registro.html')
+    return render_template('registro.html')
 
 
-@app.route('/evento/<id>',methods=["POST","GET"])
+@app.route('/evento',methods=["POST","GET"])
 def insertEvent(id):
     if request.method == 'POST':
         titulo = request.form['title']
@@ -67,13 +73,17 @@ def insertEvent(id):
         hora = request.form['hora']
         fecha = request.form['fecha']
         lugar = request.form['lugar']
-
         cursor = mysql.connection.cursor()
-        cursor.execute(f'SELECT * FROM usuario WHERE id = {id}')
-        cursor.execute('INSERT INTO eventos (titulo, descripcion, hora, fecha, lugar) VALUES (%s,%s,%s,%s,%s)',(titulo, descripcion, hora, fecha, lugar))
-        mysql.connection.commit()
-        flash("Evento guardado con éxito")
-        return redirect(url_for('eventos'))
+        id=cursor.fetchone()
+        if id:
+            session['codEvento'] = id['codEvento']
+            cursor.execute(F'INSERT INTO eventos (titulo, descripcion, hora, fecha, lugar, codEvento) VALUES ({titulo},{descripcion},{hora},{fecha},{lugar},{id})')
+            mysql.connection.commit()
+            data = cursor.fetchall()
+            flash("Evento guardado con éxito")
+
+            return render_template('index.html')
+
 
 
 

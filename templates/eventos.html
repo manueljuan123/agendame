@@ -13,11 +13,7 @@
   
 <!--JS LOCAL BT-->
   <script src = "https://code.jquery.com/jquery-3.0.0.min.js"> </script>
-  <link rel='stylesheet' href='static/css/fullcalendar.min.css' />
-  <script src='static/js/jquery.min.js'></script>
-  <script src='static/js/moment.min.js'></script>
-  <script src='static/css/fullcalendar.min.js'></script>
-  <script src="static/js/es.js"></script>
+
   
   <!--Css datatable-->
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
@@ -133,12 +129,14 @@
       <div class="modal-body">
         <div id="descripcionEvento"></div>
 
-<div class="form-group">
-                  <input class="form-control " type="date" placeholder="Fecha" id="fecha" name="fecha">
+        <form action="/evento/{{id}}" method="POST"> 
+
+                <div class="form-group">
+                  <input class="form-control " type="date" placeholder="Fecha" id="fecha" name="fecha" required>
                 </div>
               
                 <div class="form-group">
-                  <input class="form-control " type="text" placeholder="Título del evento" id="title" name="title">
+                  <input class="form-control " type="text" placeholder="Título del evento" id="title" name="title" required>
                 </div>
 
                 <div class="form-group">
@@ -150,13 +148,15 @@
                 </div>
 
                 <div class="form-group">
-                  <textarea class="form-control " type="text" placeholder="Descripción" id="descripcion" name="descripcion" row="3" ></textarea>
+                  <textarea class="form-control " type="text" placeholder="Descripción" id="descripcion" name="descripcion" row="3" required ></textarea>
                 </div>
               
             
               <div class="modal-footer ">
-                <button type="button" class="btn btn-success btn-lg">GUARDAR EVENTO</button>
+                <button type="submit" class="btn btn-success btn-lg">GUARDAR EVENTO</button>
               </div>
+            </form>
+            
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
@@ -165,8 +165,32 @@
   </div>
 </div>
 
-
-
+<div class="col-md-10 pt-3">
+  <table class="table table-striped table-bordered  table-sm text-dark" id="datatable">
+      <thead>
+          <td>Lugar</td>
+          <td>Descripción</td>
+          <td>Fecha</td>
+          <td>Hora</td>
+          <td>Operations</td>
+      </thead>
+      <tbody>
+        {% for eventos in eventos %}
+          <tr>
+              <td>{{eventos.4}}</td>
+              <td>{{eventos.1}}</td>
+              <td>{{eventos.3}}</td>
+              <td>{{eventos.2}}</td>
+              <td>
+                <a href="" class="btn btn-light">Edit</a>
+                <a href="" class="btn btn-danger btn-delete">Delete</a>
+            </td>
+        </tr>
+      {% endfor %}  
+    </tbody>
+</table>
+</div>
+</div>
 
 <!--JS DataTable-->
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
@@ -176,6 +200,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js"></script>
 
 </body>
+<script>
+  $(document).ready( function () {
+    $('#datatable').DataTable();
+} );
+</script>
 </html>
 
 {% endblock %}
