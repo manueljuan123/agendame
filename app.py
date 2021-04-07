@@ -66,37 +66,27 @@ def registro():
 
 
 @app.route('/evento',methods=["POST","GET"])
-def insertEvent(id):
+def insertEvent():
     if request.method == 'POST':
-        titulo = request.form['title']
         descripcion = request.form['descripcion']
         hora = request.form['hora']
         fecha = request.form['fecha']
         lugar = request.form['lugar']
+        
         cursor = mysql.connection.cursor()
-        id=cursor.fetchone()
-        if id:
-            session['codEvento'] = id['codEvento']
-            cursor.execute(F'INSERT INTO eventos (titulo, descripcion, hora, fecha, lugar, codEvento) VALUES ({titulo},{descripcion},{hora},{fecha},{lugar},{id})')
-            mysql.connection.commit()
-            data = cursor.fetchall()
-            flash("Evento guardado con éxito")
 
-            return render_template('index.html')
+        cursor.execute('INSERT INTO eventos (descripcion, hora, fecha, lugar) VALUES (%s,%s,%s,%s)',(descripcion,hora,lugar,fecha))
+        mysql.connection.commit()
+        
+        flash("Evento guardado con éxito")
+
+        return render_template('index.html')
 
 @app.route("/salir")
 # Funcion para salir
 def salir():
     session.clear()
     return redirect(url_for('index'))
-
-@app.route('/delete/<string:id>')
-def delete_contact(id):
-    cur = mysql.connection.cursor()
-    cur.execute('DELETE FROM eventos WHERE id = {0}'.format(id))
-    mysql.connection.commit()
-    flash('Contact Removed Successfully')
-    return redirect(url_for('Index'))
 
 
 
