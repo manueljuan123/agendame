@@ -27,7 +27,7 @@ def index():
         
         usuario= cursor.fetchone()
         if usuario is None:
-            flash("Su datos son incorrectos")
+            flash("Sus credenciales no se encuentran en nuestra base de datos. Por favor, regístrese.")
             return redirect(url_for('index'))
             
         
@@ -36,7 +36,7 @@ def index():
             return redirect(url_for('login'))
             
         else:
-            flash("Su contraseña es incorrectos")
+            flash("Su email está registrado con nosotros, sin embargo, la contraseña es errónea. Por favor, vuelva a intentarlo")
             return redirect(url_for('index'))
 
 @app.route('/eventos', methods=["POST","GET"])
@@ -65,11 +65,12 @@ def registro():
         cursor = mysql.connection.cursor()
         cursor.execute('INSERT INTO usuario (nombreUsuario, apellidoUsuario, edadUsuario, ocupacion, email, contrasena) VALUES (%s,%s,%s,%s,%s,%s)',(nombreUsuario,apellidoUsuario,edadUsuario,ocupacion,email,contrasena)) 
         mysql.connection.commit()
-        flash("Se ha registrado con éxito, gracias por elegirnos.")
         cursor.execute(f"SELECT idUsuario FROM usuario WHERE email = '{email}'")
         id = cursor.fetchone()
         session['login']=id[0]
+        flash("Se ha registrado con éxito, gracias por elegirnos.")
         return redirect(url_for('login'))
+        
 
     return render_template('registro.html')
 
@@ -97,11 +98,10 @@ def insertEvent():
 
 
 
-@app.route('/editar', methods=['POST','GET'])
-def editar():
+@app.route('/editar/<id>', methods=['POST','GET'])
+def editar(id):
     if request.method == 'POST':
-        id_usuario = session['login']
-        idEvento = request.form.get('id')
+        idEvento = id
         descripcion = request.form.get('descripcion')
         hora = request.form.get('hora')
         fecha = request.form.get('fecha')
@@ -116,37 +116,33 @@ def editar():
         WHERE id = %s
         """, (descripcion,hora,fecha,lugar,idEvento))
         mysql.connection.commit()
-
-        cursor = mysql.connection.cursor()
-        cursor.execute("SELECT * FROM eventos WHERE codEvento = %s", [id_usuario])
-        data = cursor.fetchall()
         
         flash('Evento editado con éxito')
-        return redirect(url_for('login',editar=data))
-        
-    return render_template('edit.html')
+        return redirect(url_for('login'))
+
+    cursor = mysql.connection.cursor()
+    cursor.execute("""SELECT * FROM eventos WHERE id = %s""", [id])
+    mysql.connection.commit()
+    data = cursor.fetchone()
+    return render_template('edit.html', evento = data)
 
 
 
-@app.route('/eliminar')
-@app.route('/eliminar/<id>')
-def eliminar_evento(id=-1):
-    pass
-    '''
-    if id != -1:
-        cur = mysql.connection.cursor()
-        cur.execute(f'DELETE * FROM eventos WHERE id = {id}')
-        mysql.connection.commit()
-        flash('Contact Removed Successfully')
-    else:
-        flash("You can't get into the link")
+@app.route('/eliminar/<id>',methods=['POST'])
+def eliminar_evento(id):
+
+    cur = mysql.connection.cursor()
+    cur.execute(f'DELETE FROM eventos WHERE id = {id}')
+    mysql.connection.commit()
+    flash('Evento eliminado con éxito')
     return redirect(url_for('login'))
-    '''
+
 
 @app.route("/salir")
 # Funcion para salir
 def salir():
     session.clear()
+    flash('Gracias por ingresar, ¡Vuelve pronto!')
     return redirect(url_for('index'))
 
 
