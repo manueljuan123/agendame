@@ -65,7 +65,7 @@ def registro():
         cursor = mysql.connection.cursor()
         cursor.execute('INSERT INTO usuario (nombreUsuario, apellidoUsuario, edadUsuario, ocupacion, email, contrasena) VALUES (%s,%s,%s,%s,%s,%s)',(nombreUsuario,apellidoUsuario,edadUsuario,ocupacion,email,contrasena)) 
         mysql.connection.commit()
-        flash("Se ha registrado con éxito, gracias por elegirnos. Para confirmar, ingrese con los datos anteriormente digitados, por favor.")
+        flash("Se ha registrado con éxito, gracias por elegirnos.")
         cursor.execute(f"SELECT idUsuario FROM usuario WHERE email = '{email}'")
         id = cursor.fetchone()
         session['login']=id[0]
@@ -81,13 +81,13 @@ def insertEvent():
         return render_template('index.html')
     if request.method == 'POST':
         id_usuario = session['login']
-        descripcion = request.form.get ('descripcion')
-        hora = request.form.get ('hora')
-        fecha = request.form.get ('fecha')
-        lugar = request.form.get ('lugar')
+        descripcion = request.form.get('descripcion')
+        hora = request.form.get('hora')
+        fecha = request.form.get('fecha')
+        lugar = request.form.get('lugar')
         cursor = mysql.connection.cursor()
         
-        cursor.execute('INSERT INTO eventos (descripcion, hora, fecha, lugar, codEvento) VALUES (%s,%s,%s,%s,%s)',(descripcion,hora,lugar,fecha,id_usuario))
+        cursor.execute('INSERT INTO eventos (descripcion, hora, fecha, lugar, codEvento) VALUES (%s,%s,%s,%s,%s)',(descripcion,hora,fecha, lugar, id_usuario))
         mysql.connection.commit()
             
         flash("Evento guardado con éxito")
