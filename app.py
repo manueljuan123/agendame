@@ -15,35 +15,41 @@ mysql = MySQL(app)
 
 app.secret_key = 'mysecretkey'
 
-@app.route('/')
+@app.route('/', methods=["POST","GET"])
 def index():
-    return render_template('index.html')
-
+    if request.method == 'GET':
+        return render_template('index.html')
+    else:
+        correo=request.form.get('email')
+        password=request.form.get('contrasena')
+        cursor = mysql.connection.cursor()
+        cursor.execute(f"SELECT idUsuario, contrasena FROM usuario WHERE email = '{correo}'")
+        
+        usuario= cursor.fetchone()
+        if usuario is None:
+            flash("Su datos son incorrectos")
+            return redirect(url_for('index'))
+            
+        
+        if usuario[1]==password:
+            session['login']=usuario[0]
+            return redirect(url_for('login'))
+            
+        else:
+            flash("Su contraseña es incorrectos")
+            return redirect(url_for('index'))
 
 @app.route('/eventos', methods=["POST","GET"])
 def login():
-    if request.method == 'POST' and 'email' in request.form and 'contrasena' in request.form:
-        idUsuario = request.form['email']
-        idContrasena = request.form['contrasena']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM usuario WHERE email= %s AND contrasena= %s',(idUsuario,idContrasena))
-        cuenta = cursor.fetchone()
-
-        if cuenta:
-            session['loggedin'] = True
-            session['email'] = cuenta['email']
-            session['contrasena'] = cuenta['contrasena']
-
-            cur=mysql.connection.cursor()
-            cur.execute('SELECT * FROM eventos')
-            data = cur.fetchall()
-            cur.close()
-            return render_template('eventos.html', eventos = data)
-
-        else:
-            flash("Su usuario o contraseña no son correctos, vuelva a intentarlo o regístrese, por favor")
-            return render_template('index.html')
-
+    if not 'login' in session:
+        return redirect(url_for('index'))
+    if request.method=='GET':
+        curso = mysql.connection.cursor()
+        id_usuario = session['login']
+        curso.execute(f"SELECT * FROM eventos WHERE codEvento = {id_usuario}")
+        data = curso.fetchall()
+        return render_template('eventos.html', eventos = data)
+        
 
 
 @app.route('/registro', methods=["POST","GET"])       
@@ -60,27 +66,34 @@ def registro():
         cursor.execute('INSERT INTO usuario (nombreUsuario, apellidoUsuario, edadUsuario, ocupacion, email, contrasena) VALUES (%s,%s,%s,%s,%s,%s)',(nombreUsuario,apellidoUsuario,edadUsuario,ocupacion,email,contrasena)) 
         mysql.connection.commit()
         flash("Se ha registrado con éxito, gracias por elegirnos. Para confirmar, ingrese con los datos anteriormente digitados, por favor.")
-        return redirect(url_for('index'))
+        cursor.execute(f"SELECT idUsuario FROM usuario WHERE email = '{email}'")
+        id = cursor.fetchone()
+        session['login']=id[0]
+        return redirect(url_for('login'))
 
     return render_template('registro.html')
 
 
 @app.route('/evento',methods=["POST","GET"])
 def insertEvent():
+    if not 'login' in session:
+        flash("debe iniciar session")
+        return render_template('index.html')
     if request.method == 'POST':
-        descripcion = request.form['descripcion']
-        hora = request.form['hora']
-        fecha = request.form['fecha']
-        lugar = request.form['lugar']
-        
+        id_usuario = session['login']
+        descripcion = request.form.get ('descripcion')
+        hora = request.form.get ('hora')
+        fecha = request.form.get ('fecha')
+        lugar = request.form.get ('lugar')
         cursor = mysql.connection.cursor()
-
-        cursor.execute('INSERT INTO eventos (descripcion, hora, fecha, lugar) VALUES (%s,%s,%s,%s)',(descripcion,hora,lugar,fecha))
-        mysql.connection.commit()
         
+        cursor.execute('INSERT INTO eventos (descripcion, hora, fecha, lugar, codEvento) VALUES (%s,%s,%s,%s,%s)',(descripcion,hora,lugar,fecha,id_usuario))
+        mysql.connection.commit()
+            
         flash("Evento guardado con éxito")
 
-        return render_template('index.html')
+        return redirect(url_for('login'))
+    
 
 @app.route("/salir")
 # Funcion para salir
