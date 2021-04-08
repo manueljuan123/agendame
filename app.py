@@ -44,10 +44,10 @@ def login():
     if not 'login' in session:
         return redirect(url_for('index'))
     if request.method=='GET':
-        curso = mysql.connection.cursor()
+        cursor = mysql.connection.cursor()
         id_usuario = session['login']
-        curso.execute(f"SELECT * FROM eventos WHERE codEvento = {id_usuario}")
-        data = curso.fetchall()
+        cursor.execute(f"SELECT * FROM eventos WHERE codEvento = {id_usuario}")
+        data = cursor.fetchall()
         return render_template('eventos.html', eventos = data)
         
 
@@ -79,6 +79,7 @@ def insertEvent():
     if not 'login' in session:
         flash("debe iniciar session")
         return render_template('index.html')
+
     if request.method == 'POST':
         id_usuario = session['login']
         descripcion = request.form.get('descripcion')
@@ -93,7 +94,54 @@ def insertEvent():
         flash("Evento guardado con éxito")
 
         return redirect(url_for('login'))
-    
+
+
+
+@app.route('/editar', methods=['POST','GET'])
+def editar():
+    if request.method == 'POST':
+        id_usuario = session['login']
+        idEvento = request.form.get('id')
+        descripcion = request.form.get('descripcion')
+        hora = request.form.get('hora')
+        fecha = request.form.get('fecha')
+        lugar = request.form.get('lugar')
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+        UPDATE eventos SET
+        descripcion = %s,
+        hora = %s,
+        fecha = %s,
+        lugar = %s
+        WHERE id = %s
+        """, (descripcion,hora,fecha,lugar,idEvento))
+        mysql.connection.commit()
+
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT * FROM eventos WHERE codEvento = %s", [id_usuario])
+        data = cursor.fetchall()
+        
+        flash('Evento editado con éxito')
+        return redirect(url_for('login',editar=data))
+        
+    return render_template('edit.html')
+
+
+
+@app.route('/eliminar')
+@app.route('/eliminar/<id>')
+def eliminar_evento(id=-1):
+    pass
+    '''
+    if id != -1:
+        cur = mysql.connection.cursor()
+        cur.execute(f'DELETE * FROM eventos WHERE id = {id}')
+        mysql.connection.commit()
+        flash('Contact Removed Successfully')
+    else:
+        flash("You can't get into the link")
+    return redirect(url_for('login'))
+    '''
 
 @app.route("/salir")
 # Funcion para salir
